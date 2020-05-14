@@ -64,7 +64,7 @@ studentDeleted(student) {
 },
 updateStudents() {
   this.$student_api.getAllStudents().then( students => {
-    this.student = students
+    this.students = students
   } )
 }
 }
