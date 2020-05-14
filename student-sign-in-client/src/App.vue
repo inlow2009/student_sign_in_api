@@ -25,32 +25,44 @@ import StudentTable from './components/StudentTable.vue'
 
 export default {
   name: 'App',
-  components: {
-    NewStudentForm,
-    StudentMessage,
-    StudentTable
-  },
-  data() {
+   data() {
     return {
     students: [],
     message: '',
     name: ''
   }
+}, 
+components: {
+    NewStudentForm,
+    StudentMessage,
+    StudentTable
+  },
+mounted() {
+  this.updateStudents()
 },
 methods: {
   newStudentAdded(student) {
-    this.students.push(student)
-    this.students.sort(function(s1, s2){
-      return s1.name.toLowerCase() < s2.name.toLowerCase() ? -1 : 1
+    this.$student_api.addStudent(student).then( student => {
+      this.updateStudents()
     })
   },
   studentArrivedOrLeft(student) {
-    this.message = student.present ? 'Welcome, ' : 'Goodbye, '
-    this.name = student.name
+   this.$student_api.updateStudents(student).then( () => {
+     this.message = student.present ? 'Welcome, ' : 'Goodbye, '
+     this.student = student.name
+     this.updateStudents()
+   })
   },
 
 studentDeleted(student) {
-  this.students = this.students.filter( s => s != student)
+ this.$student_api.deleteStudent(student.id).then( () => {
+   this.updateStudents()
+ })
+},
+updateStudents() {
+  this.$student_api.getAllStudents().then( students => {
+    this.student = students
+  } )
 }
 }
 }
