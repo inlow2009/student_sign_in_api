@@ -25,13 +25,16 @@ router.post('/students', function(req, res, next){
 })
 
 router.patch('/students/:id', function(req, res, next) {
-    Student.update( req.body, { where: { id: req.params.id} })
-    .then( rowsModified => {
+    Student.update( 
+        req.body, { 
+            where: {
+                 id: req.params.id} 
+                })  .then( rowsModified => {
        if (!rowsModified[0]) {
            //4040 = not gound, student with this id not found
            return res.status(404).send('Not Found')
        } else {
-           return res.send(ok)
+           return res.send('ok')
        }
     }).catch( err => {
         if (err instanceof Sequelize.ValidationError) {
